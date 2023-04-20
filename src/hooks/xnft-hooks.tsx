@@ -1,125 +1,125 @@
-import { Event, XnftMetadata } from '@coral-xyz/common-public';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { useEffect, useState } from 'react';
+import { Event, XnftMetadata } from '@coral-xyz/common-public'
+import { Connection, PublicKey } from '@solana/web3.js'
+import { useEffect, useState } from 'react'
 
 declare global {
-	interface Window {
-		xnft: any;
-	}
+  interface Window {
+    xnft: any
+  }
 }
 
 export function usePublicKeys(): { [key: string]: PublicKey } | undefined {
-	const didLaunch = useDidLaunch();
-	const [publicKeys, setPublicKeys] = useState();
-	useEffect(() => {
-		if (didLaunch) {
-			window.xnft.on('publicKeysUpdate', () => {
-				setPublicKeys(window.xnft.publicKeys);
-			});
-			setPublicKeys(window.xnft.publicKeys);
-		}
-	}, [didLaunch, setPublicKeys]);
-	return publicKeys;
+  const didLaunch = useDidLaunch()
+  const [publicKeys, setPublicKeys] = useState()
+  useEffect(() => {
+    if (didLaunch) {
+      window.xnft.on('publicKeysUpdate', () => {
+        setPublicKeys(window.xnft.publicKeys)
+      })
+      setPublicKeys(window.xnft.publicKeys)
+    }
+  }, [didLaunch, setPublicKeys])
+  return publicKeys
 }
 
 export function useSolanaConnection(): Connection | undefined {
-	const didLaunch = useDidLaunch();
-	const [connection, setConnection] = useState();
-	useEffect(() => {
-		if (didLaunch) {
-			window.xnft.solana.on('connectionUpdate', () => {
-				setConnection(window.xnft.solana.connection);
-			});
-			setConnection(window.xnft.solana.connection);
-		}
-	}, [didLaunch, setConnection]);
-	return connection;
+  const didLaunch = useDidLaunch()
+  const [connection, setConnection] = useState()
+  useEffect(() => {
+    if (didLaunch) {
+      window.xnft.solana.on('connectionUpdate', () => {
+        setConnection(window.xnft.solana.connection)
+      })
+      setConnection(window.xnft.solana.connection)
+    }
+  }, [didLaunch, setConnection])
+  return connection
 }
 
 export function useEthereumConnection(): Connection | undefined {
-	const didLaunch = useDidLaunch();
-	const [connection, setConnection] = useState();
-	useEffect(() => {
-		if (didLaunch) {
-			window.xnft.ethereum?.on('connectionUpdate', () => {
-				setConnection(window.xnft.ethereum.connection);
-			});
-			setConnection(window.xnft.ethereum.connection);
-		}
-	}, [didLaunch, setConnection]);
-	return connection;
+  const didLaunch = useDidLaunch()
+  const [connection, setConnection] = useState()
+  useEffect(() => {
+    if (didLaunch) {
+      window.xnft.ethereum?.on('connectionUpdate', () => {
+        setConnection(window.xnft.ethereum.connection)
+      })
+      setConnection(window.xnft.ethereum.connection)
+    }
+  }, [didLaunch, setConnection])
+  return connection
 }
 
 // Returns true if the `window.xnft` object is ready to be used.
 export function useDidLaunch() {
-	const [didConnect, setDidConnect] = useState(false);
-	useEffect(() => {
-		window.addEventListener('load', () => {
-			window.xnft.on('connect', () => {
-				setDidConnect(true);
-			});
-			window.xnft.on('disconnect', () => {
-				setDidConnect(false);
-			});
-		});
-	}, []);
-	return didConnect;
+  const [didConnect, setDidConnect] = useState(false)
+  useEffect(() => {
+    window.addEventListener('load', () => {
+      window.xnft.on('connect', () => {
+        setDidConnect(true)
+      })
+      window.xnft.on('disconnect', () => {
+        setDidConnect(false)
+      })
+    })
+  }, [])
+  return didConnect
 }
 
-export const useReady = useDidLaunch;
+export const useReady = useDidLaunch
 
 export function useMetadata(): XnftMetadata | undefined {
-	const didLaunch = useDidLaunch();
-	const [metadata, setMetadata] = useState();
+  const didLaunch = useDidLaunch()
+  const [metadata, setMetadata] = useState()
 
-	useEffect(() => {
-		if (didLaunch) {
-			setMetadata(window.xnft.metadata);
-			window.xnft.addListener('metadata', (event: Event) => {
-				setMetadata(event.data.metadata);
-			});
-		}
-	}, [didLaunch, setMetadata]);
-	return metadata;
+  useEffect(() => {
+    if (didLaunch) {
+      setMetadata(window.xnft.metadata)
+      window.xnft.addListener('metadata', (event: Event) => {
+        setMetadata(event.data.metadata)
+      })
+    }
+  }, [didLaunch, setMetadata])
+  return metadata
 }
 
 export function useDimensions(debounceMs = 0) {
-	const [dimensions, setDimensions] = useState({
-		height: window.innerHeight,
-		width: window.innerWidth,
-	});
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  })
 
-	const debounce = (fn: Function) => {
-		let timer: ReturnType<typeof setTimeout>;
-		return function () {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				clearTimeout(timer);
-				// @ts-ignore
-				fn.apply(this, arguments);
-			}, debounceMs);
-		};
-	};
+  const debounce = (fn: Function) => {
+    let timer: ReturnType<typeof setTimeout>
+    return function () {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        clearTimeout(timer)
+        // @ts-ignore
+        fn.apply(this, arguments)
+      }, debounceMs)
+    }
+  }
 
-	useEffect(() => {
-		setDimensions({
-			height: window.innerHeight,
-			width: window.innerWidth,
-		});
+  useEffect(() => {
+    setDimensions({
+      height: window.innerHeight,
+      width: window.innerWidth,
+    })
 
-		const debouncedHandleResize = debounce(function handleResize() {
-			setDimensions({
-				height: window.innerHeight,
-				width: window.innerWidth,
-			});
-		});
+    const debouncedHandleResize = debounce(function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      })
+    })
 
-		window.addEventListener('resize', debouncedHandleResize);
+    window.addEventListener('resize', debouncedHandleResize)
 
-		return () => {
-			window.removeEventListener('resize', debouncedHandleResize);
-		};
-	}, []);
+    return () => {
+      window.removeEventListener('resize', debouncedHandleResize)
+    }
+  }, [])
 
-	return dimensions;
+  return dimensions
 }
