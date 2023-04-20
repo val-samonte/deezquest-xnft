@@ -5,7 +5,9 @@
   "website": "https://deezquest.vercel.app/",
   "kind": "app",
   "icon": {
-    "md": "./assets/DeezQuest.png"
+    "sm": "./assets/DeezQuest.png",
+    "md": "./assets/DeezQuest.png",
+    "lg": "./assets/DeezQuest.png"
   },
   "contact": {
     "repository": "https://github.com/val-samonte/deezquest"
