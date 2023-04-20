@@ -1,48 +1,6 @@
-# xnft-quickstart
 
-Quickstart repo for building your own xNFT.
+<img width="500" alt="Title" src="https://user-images.githubusercontent.com/767060/233477014-04f846ad-5865-4231-a174-8cc37cf8926f.png">
 
-## Developing
+This repo is for DeezQuest's xNFT. Please checkout the [main repo here](https://github.com/val-samonte/deezquest).
 
-Once you've installed Backpack, get started building your xNFT with these steps. Note that the packages here will always use the latest, which correspond to the latest tagged build of Backpack. If you have unexepected issues, make sure your package versions match the app version.
-
-Further documentation: https://docs.xnfts.dev/getting-started/getting-started
-
-### Install
-
-First, install dependencies.
-
-```
-yarn
-```
-
-### Run the dev server
-
-Then, run the dev server with hot reloading
-
-```
-yarn dev
-```
-
-### Open the Simulator in Backpack
-
-Now that you have your xNFT dev server running, open it in the Backpack simulator to see it run.
-
-That's it!
-
-
-## Build & Publish
-
-Once you're done and ready to publish, build your xNFT:
-
-```
-yarn build
-```
-
-Test the newly created build in `dist/index.html` in the simulator:
-
-```
-yarn start
-```
-
-Once everything looks good head over to [xnft.gg](https://www.xnft.gg) to publish your xNFT!
+Special thanks to [nelsontky](https://github.com/nelsontky) for sharing xNFT / Backpack adapter!
