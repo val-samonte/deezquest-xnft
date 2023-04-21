@@ -14,6 +14,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import bs58 from 'bs58'
 
 // original code by nelsontky
 // https://github.com/nelsontky/web3-plays-pokemon/blob/main/others/xnft/src/contexts/XnftProvider.tsx
@@ -107,12 +108,12 @@ export default function XnftContextProvider({
             case 'signMessage':
               try {
                 const signedMessage = await backpack.signMessage(
-                  toUint8Array(payload),
+                  bs58.decode(payload),
                 )
                 contentWindow.postMessage(
                   JSON.stringify({
                     success: true,
-                    payload: toBase64(signedMessage),
+                    payload: bs58.encode(signedMessage),
                   }),
                   IFRAME_ORIGIN,
                 )
@@ -121,8 +122,7 @@ export default function XnftContextProvider({
                   contentWindow.postMessage(
                     JSON.stringify({
                       success: false,
-                      payload:
-                        /*e.message*/ 'An error has occurred. Please try again.',
+                      payload: e.message, // 'An error has occurred. Please try again.',
                     }),
                     IFRAME_ORIGIN,
                   )
@@ -132,12 +132,12 @@ export default function XnftContextProvider({
             case 'signTransaction':
               try {
                 const signedTransaction = await backpack.signTransaction(
-                  Transaction.from(toUint8Array(payload)),
+                  Transaction.from(bs58.decode(payload)),
                 )
                 contentWindow.postMessage(
                   JSON.stringify({
                     success: true,
-                    payload: toBase64(
+                    payload: bs58.encode(
                       Uint8Array.from(signedTransaction.serialize()),
                     ),
                   }),
@@ -185,8 +185,3 @@ export default function XnftContextProvider({
 }
 
 export const useXnft = () => useContext(XnftContext)
-
-const toBase64 = (uint8Array: Uint8Array) =>
-  Buffer.from(uint8Array).toString('base64')
-
-const toUint8Array = (data: string) => Buffer.from(data, 'base64')
