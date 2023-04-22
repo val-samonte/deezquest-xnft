@@ -83,90 +83,90 @@ export default function XnftContextProvider({
     checkXnft()
   }, [])
 
-  useEffect(
-    function listenToWalletEvents() {
-      const contentWindow = appIframeElement?.contentWindow
-      if (backpack && !!contentWindow) {
-        const listener = async (event: MessageEvent<any>) => {
-          if (event.origin !== IFRAME_ORIGIN) {
-            return
-          }
-          const { action, payload } = JSON.parse(event.data)
+  useEffect(() => {
+    const contentWindow = appIframeElement?.contentWindow
 
-          switch (action) {
-            case 'publicKey':
-              {
-                contentWindow.postMessage(
-                  JSON.stringify({
-                    success: true,
-                    payload: backpack.publicKey.toBase58(),
-                  }),
-                  IFRAME_ORIGIN,
-                )
-              }
-              break
-            case 'signMessage':
-              try {
-                const signedMessage = await backpack.signMessage(
-                  bs58.decode(payload),
-                )
-                contentWindow.postMessage(
-                  JSON.stringify({
-                    success: true,
-                    payload: bs58.encode(signedMessage),
-                  }),
-                  IFRAME_ORIGIN,
-                )
-              } catch (e) {
-                if (e instanceof Error) {
-                  contentWindow.postMessage(
-                    JSON.stringify({
-                      success: false,
-                      payload: e.message, // 'An error has occurred. Please try again.',
-                    }),
-                    IFRAME_ORIGIN,
-                  )
-                }
-              }
-              break
-            case 'signTransaction':
-              try {
-                const signedTransaction = await backpack.signTransaction(
-                  Transaction.from(bs58.decode(payload)),
-                )
-                contentWindow.postMessage(
-                  JSON.stringify({
-                    success: true,
-                    payload: bs58.encode(
-                      Uint8Array.from(signedTransaction.serialize()),
-                    ),
-                  }),
-                  IFRAME_ORIGIN,
-                )
-              } catch (e) {
-                if (e instanceof Error) {
-                  contentWindow.postMessage(
-                    JSON.stringify({
-                      success: false,
-                      payload:
-                        /*e.message*/ 'An error has occurred. Please try again.',
-                    }),
-                    IFRAME_ORIGIN,
-                  )
-                }
-              }
-              break
-          }
-        }
-        window.addEventListener('message', listener)
-
-        return () => {
-          window.removeEventListener('message', listener)
-        }
+    const listener = async (event: MessageEvent<any>) => {
+      if (event.origin !== IFRAME_ORIGIN) {
+        throw new Error(
+          `Invalid origin ${event.origin}, expecting ${IFRAME_ORIGIN}`,
+        )
       }
-    },
-    [backpack, appIframeElement],
-  )
+
+      if (!backpack || !contentWindow) return
+      const { action, payload } = JSON.parse(event.data)
+
+      switch (action) {
+        case 'publicKey':
+          {
+            contentWindow.postMessage(
+              JSON.stringify({
+                success: true,
+                payload: backpack.publicKey.toBase58(),
+              }),
+              IFRAME_ORIGIN,
+            )
+          }
+          break
+        case 'signMessage':
+          try {
+            const signedMessage = await backpack.signMessage(
+              bs58.decode(payload),
+            )
+            contentWindow.postMessage(
+              JSON.stringify({
+                success: true,
+                payload: bs58.encode(signedMessage),
+              }),
+              IFRAME_ORIGIN,
+            )
+          } catch (e) {
+            if (e instanceof Error) {
+              contentWindow.postMessage(
+                JSON.stringify({
+                  success: false,
+                  payload: e.message, // 'An error has occurred. Please try again.',
+                }),
+                IFRAME_ORIGIN,
+              )
+            }
+          }
+          break
+        case 'signTransaction':
+          try {
+            const signedTransaction = await backpack.signTransaction(
+              Transaction.from(bs58.decode(payload)),
+            )
+            contentWindow.postMessage(
+              JSON.stringify({
+                success: true,
+                payload: bs58.encode(
+                  Uint8Array.from(signedTransaction.serialize()),
+                ),
+              }),
+              IFRAME_ORIGIN,
+            )
+          } catch (e) {
+            if (e instanceof Error) {
+              contentWindow.postMessage(
+                JSON.stringify({
+                  success: false,
+                  payload:
+                    /*e.message*/ 'An error has occurred. Please try again.',
+                }),
+                IFRAME_ORIGIN,
+              )
+            }
+          }
+          break
+      }
+    }
+    window.addEventListener('message', listener)
+
+    return () => {
+      window.removeEventListener('message', listener)
+    }
+  }, [backpack, appIframeElement])
 
   if (!backpack) {
     return null
