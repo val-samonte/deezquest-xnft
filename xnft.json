@@ -1,19 +1,19 @@
 {
   "name": "DeezQuest",
   "version": "0.0.1",
-  "description": "Play Match 3 + RPG in Solana!",
-  "website": "https://deezquest.vercel.app/",
+  "description": "Open Source Puzzle RPG",
+  "website": "https://twitter.com/deezquest",
   "storage": "arweave",
   "kind": "app",
+  "tag": "game",
   "icon": {
     "md": "./assets/DeezQuest.png"
   },
   "contact": "https://github.com/val-samonte/deezquest",
   "screenshots": [
-    "./assets/screenshot1.png",
-    "./assets/screenshot2.png",
     "./assets/screenshot3.png",
-    "./assets/screenshot4.png"
+    "./assets/screenshot4.png",
+    "./assets/screenshot2.png"
   ],
   "entrypoints": {
     "default": {

@@ -62,7 +62,7 @@ interface XnftContextProviderProps {
 export const IFRAME_ORIGIN =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000'
-    : 'https://deezquest.vercel.app/'
+    : 'https://deezquest.vercel.app'
 
 export default function XnftContextProvider({
   children,
