@@ -1,9 +1,9 @@
 {
   "name": "DeezQuest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Open Source Puzzle RPG",
   "website": "https://twitter.com/deezquest",
-  "storage": "arweave",
+  "storage": "aws",
   "kind": "app",
   "tag": "game",
   "icon": {
