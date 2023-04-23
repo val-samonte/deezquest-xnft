@@ -9,6 +9,7 @@ function App() {
   return (
     <iframe
       allow={`fullscreen;clipboard-write ${IFRAME_ORIGIN}`}
+      // sandbox='allow-same-origin allow-scripts allow-forms allow-popups'
       src={IFRAME_ORIGIN}
       style={tw`border-0 w-full h-full`}
       ref={(node) => {
